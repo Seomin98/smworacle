@@ -1,21 +1,22 @@
 -- ORA-01031: insufficient privileges
+
 CREATE TABLE STUDENT_TBL(
     STUDENT_NAME VARCHAR2(20),
     STUDENT_AGE NUMBER,
     STUDENT_GRADE NUMBER,
     STUDENT_ADDRESS VARCHAR2(100)
 );
--- ¼öÁ¤ -> »èÁ¦ + »ý¼º
--- Å×ÀÌºí »èÁ¦
+-- ìˆ˜ì • -> ì‚­ì œ + ìƒì„±
+-- í…Œì´ë¸” ì‚­ì œ
 -- ORA-00942: table or view does not exist
 DROP TABLE STUDENT_TBL;
--- TABLE¿¡ µ¥ÀÌÅÍ¸¦ ³Ö´Â ¹æ¹ý! -> È¸¿ø°¡ÀÔ
+-- TABLEì— ë°ì´í„°ë¥¼ ë„£ëŠ” ë°©ë²•! -> íšŒì›ê°€ìž…
 INSERT INTO STUDENT_TBL(STUDENT_NAME, STUDENT_AGE, STUDENT_GRADE, STUDENT_ADDRESS)
-VALUES('ÀÏ¿ëÀÚ', 11, 1, '¼­¿ï½Ã Áß±¸');
--- ÄÃ·³¸í »ý·« °¡´É!
-INSERT INTO STUDENT_TBL VALUES('ÀÌ¿ëÀÚ', 22, 2, '¼­¿ï½Ã Á¾·Î±¸');
-INSERT INTO STUDENT_TBL VALUES('»ï¿ëÀÚ', 33, 3, '¼­¿ï½Ã µ¿´ë¹®±¸');
-INSERT INTO STUDENT_TBL VALUES('»ç¿ëÀÚ', 44, 4, '¼­¿ï½Ã ¼­´ë¹®±¸');
+VALUES('ì¼ìš©ìž', 11, 1, 'ì„œìš¸ì‹œ ì¤‘êµ¬');
+-- ì»¬ëŸ¼ëª… ìƒëžµ ê°€ëŠ¥!
+INSERT INTO STUDENT_TBL VALUES('ì´ìš©ìž', 22, 2, 'ì„œìš¸ì‹œ ì¢…ë¡œêµ¬');
+INSERT INTO STUDENT_TBL VALUES('ì‚¼ìš©ìž', 33, 3, 'ì„œìš¸ì‹œ ë™ëŒ€ë¬¸êµ¬');
+INSERT INTO STUDENT_TBL VALUES('ì‚¬ìš©ìž', 44, 4, 'ì„œìš¸ì‹œ ì„œëŒ€ë¬¸êµ¬');
 
 UPDATE STUDENT_TBL
 SET STUDENT_AGE = 99
@@ -26,28 +27,28 @@ WHERE STUDENT_GRADE = 2;
 
 INSERT INTO STUDENT_TBL
 VALUES(' ', 55, 5, NULL);
--- µ¥ÀÌÅÍ¸¦ »èÁ¦ÇØº¸ÀÚ -> È¸¿øÅ»Åð
+-- ë°ì´í„°ë¥¼ ì‚­ì œí•´ë³´ìž -> íšŒì›íƒˆí‡´
 DELETE FROM STUDENT_TBL
 WHERE STUDENT_GRADE = 2;
 
 DESC DATATYPE_TBL;
 INSERT INTO DATATYPE_TBL
-VALUES('¹®ÀÚ', '¹®ÀÚ¿­', 22, SYSDATE, SYSTIMESTAMP);
+VALUES('ë¬¸ìž', 'ë¬¸ìžì—´', 22, SYSDATE, SYSTIMESTAMP);
 SELECT MOONJJA, MOONJJAYUL, SOOJJA, NALJJA, NALJJA2
 FROM DATATYPE_TBL;
 INSERT INTO DATATYPE_TBL
-VALUES('¹®ÀÚ2', '¹®ÀÚ¿­2', 33, SYSDATE, SYSTIMESTAMP);
+VALUES('ë¬¸ìž2', 'ë¬¸ìžì—´2', 33, SYSDATE, SYSTIMESTAMP);
 
 UPDATE DATATYPE_TBL
-SET MOONJJA = '¿À¶óÅ¬'
+SET MOONJJA = 'ì˜¤ë¼í´'
 WHERE SOOJJA = 33;
--- 1 Çà ÀÌ(°¡) ¾÷µ¥ÀÌÆ®µÇ¾ú½À´Ï´Ù.
+-- 1 í–‰ ì´(ê°€) ì—…ë°ì´íŠ¸ë˜ì—ˆìŠµë‹ˆë‹¤.
 DELETE FROM DATATYPE_TBL
 WHERE SOOJJA = 22;
--- 1 Çà ÀÌ(°¡) »èÁ¦µÇ¾ú½À´Ï´Ù.
+-- 1 í–‰ ì´(ê°€) ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.
 
 
--- µ¥ÀÌÅÍ Á¶È¸
+-- ë°ì´í„° ì¡°íšŒ
 -- FROM -> WHERE -> SELECT
 SELECT STUDENT_NAME, STUDENT_AGE, STUDENT_GRADE, STUDENT_ADDRESS
 FROM STUDENT_TBL
