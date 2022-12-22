@@ -2,12 +2,13 @@ CREATE TABLE USER_GRADE (
     GRADE_CODE NUMBER PRIMARY KEY,
     GRADE_NAME VARCHAR2(30) NOT NULL
 );
--- Table USER_GRADEÀÌ(°¡) »ý¼ºµÇ¾ú½À´Ï´Ù.
+-- Table USER_GRADEì´(ê°€) ìƒì„±ë˜ì—ˆìŠµë‹ˆë‹¤.
 DESC USER_GRADE;
+
 SELECT * FROM USER_GRADE;
-INSERT INTO USER_GRADE VALUES(10, 'ÀÏ¹ÝÈ¸¿ø');
-INSERT INTO USER_GRADE VALUES(20, '¿ì¼öÈ¸¿ø');
-INSERT INTO USER_GRADE VALUES(30, 'Æ¯º°È¸¿ø');
+INSERT INTO USER_GRADE VALUES(10, 'ì¼ë°˜íšŒì›');
+INSERT INTO USER_GRADE VALUES(20, 'ìš°ìˆ˜íšŒì›');
+INSERT INTO USER_GRADE VALUES(30, 'íŠ¹ë³„íšŒì›');
 
 CREATE TABLE USER_FOREIGNKEY(
     USER_NO NUMBER CONSTRAINT USER_NO_PK PRIMARY KEY,
@@ -18,69 +19,69 @@ CREATE TABLE USER_FOREIGNKEY(
     EMAIL VARCHAR2(50),
     GRADE_CODE NUMBER CONSTRAINT GRADE_CODE_FK REFERENCES USER_GRADE(GRADE_CODE)
 );
--- Table USER_FOREIGNKEYÀÌ(°¡) »ý¼ºµÇ¾ú½À´Ï´Ù.
+-- Table USER_FOREIGNKEYì´(ê°€) ìƒì„±ë˜ì—ˆìŠµë‹ˆë‹¤.
 SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE
 FROM USER_CONSTRAINTS
 WHERE TABLE_NAME = 'USER_FOREIGNKEY';
 DESC USER_CONSTRAINTS;
 
 INSERT INTO USER_FOREIGNKEY
-VALUES(1, 'user01', 'pass01', 'ÀÏ¿ëÀÚ', '³²', 'user01@iei.com', 10);
+VALUES(1, 'user01', 'pass01', 'ì¼ìš©ìž', 'ë‚¨', 'user01@iei.com', 10);
 INSERT INTO USER_FOREIGNKEY
-VALUES(2, 'user02', 'pass02', 'ÀÌ¿ëÀÚ', '³²', 'user02@iei.com', 20);
+VALUES(2, 'user02', 'pass02', 'ì´ìš©ìž', 'ë‚¨', 'user02@iei.com', 20);
 INSERT INTO USER_FOREIGNKEY
-VALUES(3, 'user03', 'pass03', '»ï¿ëÀÚ', '³²', 'user03@iei.com', 30);
+VALUES(3, 'user03', 'pass03', 'ì‚¼ìš©ìž', 'ë‚¨', 'user03@iei.com', 30);
 INSERT INTO USER_FOREIGNKEY
-VALUES(4, 'user04', 'pass04', '»ç¿ëÀÚ', '³²', 'user04@iei.com', 40);
+VALUES(4, 'user04', 'pass04', 'ì‚¬ìš©ìž', 'ë‚¨', 'user04@iei.com', 40);
 -- ORA-02291: integrity constraint (KH.GRADE_CODE_FK) violated - parent key not found
 SELECT GRADE_CODE, GRADE_NAME FROM USER_GRADE;
 
--- Á¦¾àÁ¶°Ç °É·ÁÀÖ´Â ºÎ¸ðÅ×ÀÌºí ·¹ÄÚµå Áö¿öº¸±â!
+-- ì œì•½ì¡°ê±´ ê±¸ë ¤ìžˆëŠ” ë¶€ëª¨í…Œì´ë¸” ë ˆì½”ë“œ ì§€ì›Œë³´ê¸°!
 DELETE FROM USER_GRADE
 WHERE GRADE_CODE = 10;
 SELECT * FROM USER_FOREIGNKEY;
 -- ORA-02292: integrity constraint (KH.GRADE_CODE_FK) violated - child record found
--- ¸øÁö¿î´Ù. ±×·±µ¥ Áö¿ì´Â ¹æ¹ý, Áï »èÁ¦¿É¼ÇÀÌ 2°³ ÀÖ´Ù.
--- 1. ON DELETE SET NULL; -> ÀÚ½ÄÅ×ÀÌºí µ¥ÀÌÅÍ¸¦ NULL·Î ¹Ù²ãÁÜ
--- 2. ON DELETE CASCADE; -> ÀÚ½ÄÅ×ÀÌºí µ¥ÀÌÅÍµµ Áö¿öÁÜ
+-- ëª»ì§€ìš´ë‹¤. ê·¸ëŸ°ë° ì§€ìš°ëŠ” ë°©ë²•, ì¦‰ ì‚­ì œì˜µì…˜ì´ 2ê°œ ìžˆë‹¤.
+-- 1. ON DELETE SET NULL; -> ìžì‹í…Œì´ë¸” ë°ì´í„°ë¥¼ NULLë¡œ ë°”ê¿”ì¤Œ
+-- 2. ON DELETE CASCADE; -> ìžì‹í…Œì´ë¸” ë°ì´í„°ë„ ì§€ì›Œì¤Œ
 ALTER TABLE USER_FOREIGNKEY
 DROP CONSTRAINT GRADE_CODE_FK;
--- Table USER_FOREIGNKEYÀÌ(°¡) º¯°æµÇ¾ú½À´Ï´Ù.
+-- Table USER_FOREIGNKEYì´(ê°€) ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.
 COMMIT;
--- Ä¿¹Ô ¿Ï·á.
+-- ì»¤ë°‹ ì™„ë£Œ.
 ROLLBACK;
--- ·Ñ¹é ¿Ï·á.
+-- ë¡¤ë°± ì™„ë£Œ.
 ALTER TABLE USER_FOREIGNKEY
 ADD CONSTRAINT GRADE_CODE_FK FOREIGN KEY(GRADE_CODE) REFERENCES USER_GRADE(GRADE_CODE)
 ON DELETE SET NULL;
 ALTER TABLE USER_FOREIGNKEY
 ADD CONSTRAINT GRADE_CODE_FK FOREIGN KEY(GRADE_CODE) REFERENCES USER_GRADE(GRADE_CODE)
 ON DELETE CASCADE;
--- Table USER_FOREIGNKEYÀÌ(°¡) º¯°æµÇ¾ú½À´Ï´Ù.
+-- Table USER_FOREIGNKEYì´(ê°€) ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.
 SELECT CONSTRAINT_NAME, CONSTRAINT_TYPE
 FROM USER_CONSTRAINTS
 WHERE TABLE_NAME='USER_FOREIGNKEY';
--- ¼¼ÁÙ ¿ä¾à
--- 1. ¿Ü·¡Å°(ÀÚ½ÄÅ×ÀÌºí)°¡ ÂüÁ¶ÇÏ´Â ºÎ¸ðÅ×ÀÌºí ÄÃ·³ µ¥ÀÌÅÍ´Â ±âº»ÀûÀ¸·Î Áö¿öÁöÁö ¾Ê´Â´Ù.
--- 2. ON DELETE SET NULL ¿É¼ÇÀº ºÎ¸ðÅ×ÀÌºí µ¥ÀÌÅÍ¸¦ Áö¿öÁÖ°í ÀÚ½ÄÅ×ÀÌºí µ¥ÀÌÅÍ´Â NULL·Î ÇØÁØ´Ù
--- 3. ON DELETE CASCADE ¿É¼ÇÀº ºÎ¸ðÅ×ÀÌºí µ¥ÀÌÅÍ¸¦ Áö¿öÁÖ°í ÀÚ½ÄÅ×ÀÌºí µ¥ÀÌÅÍµµ Áö¿öÁØ´Ù.
+-- ì„¸ì¤„ ìš”ì•½
+-- 1. ì™¸ëž˜í‚¤(ìžì‹í…Œì´ë¸”)ê°€ ì°¸ì¡°í•˜ëŠ” ë¶€ëª¨í…Œì´ë¸” ì»¬ëŸ¼ ë°ì´í„°ëŠ” ê¸°ë³¸ì ìœ¼ë¡œ ì§€ì›Œì§€ì§€ ì•ŠëŠ”ë‹¤.
+-- 2. ON DELETE SET NULL ì˜µì…˜ì€ ë¶€ëª¨í…Œì´ë¸” ë°ì´í„°ë¥¼ ì§€ì›Œì£¼ê³  ìžì‹í…Œì´ë¸” ë°ì´í„°ëŠ” NULLë¡œ í•´ì¤€ë‹¤
+-- 3. ON DELETE CASCADE ì˜µì…˜ì€ ë¶€ëª¨í…Œì´ë¸” ë°ì´í„°ë¥¼ ì§€ì›Œì£¼ê³  ìžì‹í…Œì´ë¸” ë°ì´í„°ë„ ì§€ì›Œì¤€ë‹¤.
 
-SELECT EMP_NAME, SALARY, SALARY*12 "¿¬ºÀ(º¸³Ê½º ¹ÌÆ÷ÇÔ)"
-    , BONUS, (SALARY*BONUS + SALARY*12) AS "¿¬ºÀ(º¸³Ê½º Æ÷ÇÔ)"
+SELECT EMP_NAME, SALARY, SALARY*12 "ì—°ë´‰(ë³´ë„ˆìŠ¤ ë¯¸í¬í•¨)"
+    , BONUS, (SALARY*BONUS + SALARY*12) AS "ì—°ë´‰(ë³´ë„ˆìŠ¤ í¬í•¨)"
 FROM EMPLOYEE
-WHERE SALARY > 3000000 AND EMP_NAME = '¼±µ¿ÀÏ';
+WHERE SALARY > 3000000 AND EMP_NAME = 'ì„ ë™ì¼';
 
-SELECT EMP_NAME, SALARY, SALARY*12 "¿¬ºÀ(º¸³Ê½º ¹ÌÆ÷ÇÔ)"
-    , BONUS, (SALARY*BONUS + SALARY*12) AS "¿¬ºÀ(º¸³Ê½º Æ÷ÇÔ)"
+SELECT EMP_NAME, SALARY, SALARY*12 "ì—°ë´‰(ë³´ë„ˆìŠ¤ ë¯¸í¬í•¨)"
+    , BONUS, (SALARY*BONUS + SALARY*12) AS "ì—°ë´‰(ë³´ë„ˆìŠ¤ í¬í•¨)"
 FROM EMPLOYEE
-WHERE SALARY > 3000000 OR EMP_NAME = '¼±µ¿ÀÏ'
+WHERE SALARY > 3000000 OR EMP_NAME = 'ì„ ë™ì¼'
 ORDER BY BONUS DESC;
 -- FROM -> WHERE -> SELECT -> ORDER BY
--- ORDER BY´Â ¸Ç ¸¶Áö¸·¿¡ ½ÇÇàµÇ´Â±¸³ª!
--- NULLÀ» Æ÷ÇÔÇÏ´Â ÄÃ·³ Á¤·Ä
--- ASCÀÏ ¶§ NULLÀº ¸Ç ¾Æ·¡¿¡, DESCÀÏ ¶§ NULLÀº ¸Ç ¾Õ¿¡
+-- ORDER BYëŠ” ë§¨ ë§ˆì§€ë§‰ì— ì‹¤í–‰ë˜ëŠ”êµ¬ë‚˜!
+-- NULLì„ í¬í•¨í•˜ëŠ” ì»¬ëŸ¼ ì •ë ¬
+-- ASCì¼ ë•Œ NULLì€ ë§¨ ì•„ëž˜ì—, DESCì¼ ë•Œ NULLì€ ë§¨ ì•žì—
 
--- BETWEEN A AND B, ºñ±³¿¬»êÀÚ
+-- BETWEEN A AND B, ë¹„êµì—°ì‚°ìž
 SELECT EMP_NAME, SALARY
 FROM EMPLOYEE
 --WHERE SALARY > 2000000 AND SALARY < 6000000;
@@ -91,50 +92,50 @@ FROM EMPLOYEE
 --WHERE DEPT_CODE = 'D6' OR DEPT_CODE = 'D8';
 WHERE DEPT_CODE IN ('D6', 'D8');
 
--- IS NULL/IS NOT NULL ¿¬»êÀÚ
+-- IS NULL/IS NOT NULL ì—°ì‚°ìž
 SELECT EMP_NAME, SALARY, BONUS
 FROM EMPLOYEE
 --WHERE BONUS IS NOT NULL;
 WHERE BONUS IS NULL;
 
--- LIKE ¿¬»êÀÚ
--- Àü¾¾ ¼ºÀ» °¡Áø Á÷¿øÀÇ ÀÌ¸§°ú ±Þ¿©¸¦ Á¶È¸
+-- LIKE ì—°ì‚°ìž
+-- ì „ì”¨ ì„±ì„ ê°€ì§„ ì§ì›ì˜ ì´ë¦„ê³¼ ê¸‰ì—¬ë¥¼ ì¡°íšŒ
 SELECT EMP_NAME, SALARY
 FROM EMPLOYEE
-WHERE EMP_NAME LIKE '%Àü%';
--- Àü
--- ÀüÁø
--- ÀüÅõ±â
--- ÀüÈ­¹øÈ£
--- Àü±âÀÚ±âÇÐ
--- ÀüÅõ±â¹Ì»çÀÏ
--- ÀüÀÚ±â±âÆÇ¸ÅÁ¡
--- ÀüÀÚ»ó°¡ÁöÇÏÅë·Î
+WHERE EMP_NAME LIKE '%ì „%';
+-- ì „
+-- ì „ì§„
+-- ì „íˆ¬ê¸°
+-- ì „í™”ë²ˆí˜¸
+-- ì „ê¸°ìžê¸°í•™
+-- ì „íˆ¬ê¸°ë¯¸ì‚¬ì¼
+-- ì „ìžê¸°ê¸°íŒë§¤ì 
+-- ì „ìžìƒê°€ì§€í•˜í†µë¡œ
 
--- EMPLOYEE Å×ÀÌºí¿¡¼­ ÀÌ¸§ÀÌ ³¡ÀÌ ¿¬À¸·Î ³¡³ª´Â »ç¿øÀÇ ÀÌ¸§À» Ãâ·ÂÇÏ½Ã¿À
--- ¿ÍÀÏµåÄ«µå 
--- 1. % : 0°³ ÀÌ»óÀÇ ¸ðµç ¹®ÀÚ¸¦ ¸ÅÄª
--- 2. _(¾ð´õ¹Ù) : ÇÏ³ªÀÇ ÀÚ¸®¿¡ ÇØ´çÇÏ´Â ¸ðµç ¹®ÀÚ¸¦ ¸ÅÄª
+-- EMPLOYEE í…Œì´ë¸”ì—ì„œ ì´ë¦„ì´ ëì´ ì—°ìœ¼ë¡œ ëë‚˜ëŠ” ì‚¬ì›ì˜ ì´ë¦„ì„ ì¶œë ¥í•˜ì‹œì˜¤
+-- ì™€ì¼ë“œì¹´ë“œ 
+-- 1. % : 0ê°œ ì´ìƒì˜ ëª¨ë“  ë¬¸ìžë¥¼ ë§¤ì¹­
+-- 2. _(ì–¸ë”ë°”) : í•˜ë‚˜ì˜ ìžë¦¬ì— í•´ë‹¹í•˜ëŠ” ëª¨ë“  ë¬¸ìžë¥¼ ë§¤ì¹­
 SELECT EMP_NAME
 FROM EMPLOYEE
-WHERE EMP_NAME LIKE '___¿¬';
+WHERE EMP_NAME LIKE '___ì—°';
 
 DESC EMPLOYEE;
 
--- ½Ç½À¹®Á¦
---1. EMPLOYEE Å×ÀÌºí¿¡¼­ ÀÌ¸§ ³¡ÀÌ ¿¬À¸·Î ³¡³ª´Â »ç¿øÀÇ ÀÌ¸§À» Ãâ·ÂÇÏ½Ã¿À
+-- ì‹¤ìŠµë¬¸ì œ
+--1. EMPLOYEE í…Œì´ë¸”ì—ì„œ ì´ë¦„ ëì´ ì—°ìœ¼ë¡œ ëë‚˜ëŠ” ì‚¬ì›ì˜ ì´ë¦„ì„ ì¶œë ¥í•˜ì‹œì˜¤
 SELECT EMP_NAME
 FROM EMPLOYEE
-WHERE EMP_NAME LIKE '%¿¬';
+WHERE EMP_NAME LIKE '%ì—°';
 
---2. EMPLOYEE Å×ÀÌºí¿¡¼­ ÀüÈ­¹øÈ£ Ã³À½ 3ÀÚ¸®°¡ 010ÀÌ ¾Æ´Ñ »ç¿øÀÇ ÀÌ¸§, ÀüÈ­¹øÈ£¸¦
---Ãâ·ÂÇÏ½Ã¿À
+--2. EMPLOYEE í…Œì´ë¸”ì—ì„œ ì „í™”ë²ˆí˜¸ ì²˜ìŒ 3ìžë¦¬ê°€ 010ì´ ì•„ë‹Œ ì‚¬ì›ì˜ ì´ë¦„, ì „í™”ë²ˆí˜¸ë¥¼
+--ì¶œë ¥í•˜ì‹œì˜¤
 SELECT EMP_NAME, PHONE
 FROM EMPLOYEE
 WHERE PHONE NOT LIKE '010%';
 
---3. EMPLOYEE Å×ÀÌºí¿¡¼­ ¸ÞÀÏÁÖ¼ÒÀÇ 's'°¡ µé¾î°¡¸é¼­, DEPT_CODE°¡ D9 ¶Ç´Â D6ÀÌ°í
---°í¿ëÀÏÀÌ 90/01/01 ~ 01/12/01ÀÌ¸é¼­, ¿ù±ÞÀÌ 270¸¸¿øÀÌ»óÀÎ »ç¿øÀÇ ÀüÃ¼ Á¤º¸¸¦ Ãâ·ÂÇÏ½Ã¿À
+--3. EMPLOYEE í…Œì´ë¸”ì—ì„œ ë©”ì¼ì£¼ì†Œì˜ 's'ê°€ ë“¤ì–´ê°€ë©´ì„œ, DEPT_CODEê°€ D9 ë˜ëŠ” D6ì´ê³ 
+--ê³ ìš©ì¼ì´ 90/01/01 ~ 01/12/01ì´ë©´ì„œ, ì›”ê¸‰ì´ 270ë§Œì›ì´ìƒì¸ ì‚¬ì›ì˜ ì „ì²´ ì •ë³´ë¥¼ ì¶œë ¥í•˜ì‹œì˜¤
 SELECT * FROM EMPLOYEE
 WHERE HIRE_DATE BETWEEN TO_DATE('90/01/01') AND TO_DATE('01/12/01')
 AND EMAIL LIKE '%s%'
@@ -142,34 +143,34 @@ AND SALARY >= 2700000
 --AND (DEPT_CODE ='D9' OR DEPT_CODE ='D6');
 AND DEPT_CODE IN ('D9', 'D6');
 
---4. EMPLOYEE Å×ÀÌºí¿¡¼­ EMAIL ID Áß @ ¾ÕÀÚ¸®°¡ 5ÀÚ¸®ÀÎ Á÷¿øÀ» Á¶È¸ÇÑ´Ù¸é?
+--4. EMPLOYEE í…Œì´ë¸”ì—ì„œ EMAIL ID ì¤‘ @ ì•žìžë¦¬ê°€ 5ìžë¦¬ì¸ ì§ì›ì„ ì¡°íšŒí•œë‹¤ë©´?
 SELECT EMP_NAME, EMAIL FROM EMPLOYEE
 WHERE EMAIL LIKE '_____@%';
 
---5. EMPLOYEE Å×ÀÌºí¿¡¼­ EMAIL ID Áß '_' ¾ÕÀÚ¸®°¡ 3ÀÚ¸®ÀÎ Á÷¿øÀ» Á¶È¸ÇÑ´Ù¸é?
+--5. EMPLOYEE í…Œì´ë¸”ì—ì„œ EMAIL ID ì¤‘ '_' ì•žìžë¦¬ê°€ 3ìžë¦¬ì¸ ì§ì›ì„ ì¡°íšŒí•œë‹¤ë©´?
 SELECT * FROM EMPLOYEE
 WHERE EMAIL LIKE '___$_%' ESCAPE '$';
 -- \\
--- 6. °ü¸®ÀÚ(MANAGER_ID)µµ ¾ø°í ºÎ¼­ ¹èÄ¡(DEPT_CODE)µµ ¹ÞÁö ¾ÊÀº  Á÷¿øÀÇ ÀÌ¸§ Á¶È¸
+-- 6. ê´€ë¦¬ìž(MANAGER_ID)ë„ ì—†ê³  ë¶€ì„œ ë°°ì¹˜(DEPT_CODE)ë„ ë°›ì§€ ì•Šì€  ì§ì›ì˜ ì´ë¦„ ì¡°íšŒ
 SELECT EMP_NAME FROM EMPLOYEE 
 WHERE MANAGER_ID IS NULL AND DEPT_CODE IS NULL;
 
--- 7. ºÎ¼­¹èÄ¡¸¦ ¹ÞÁö ¾Ê¾ÒÁö¸¸ º¸³Ê½º¸¦ Áö±ÞÇÏ´Â Á÷¿ø ÀüÃ¼ Á¤º¸ Á¶È¸
+-- 7. ë¶€ì„œë°°ì¹˜ë¥¼ ë°›ì§€ ì•Šì•˜ì§€ë§Œ ë³´ë„ˆìŠ¤ë¥¼ ì§€ê¸‰í•˜ëŠ” ì§ì› ì „ì²´ ì •ë³´ ì¡°íšŒ
 SELECT * FROM EMPLOYEE
 WHERE DEPT_CODE IS NULL AND BONUS IS NOT NULL;
 
---8. EMPLOYEE Å×ÀÌºí¿¡¼­ ÀÌ¸§,¿¬ºÀ, ÃÑ¼ö·É¾×(º¸³Ê½ºÆ÷ÇÔ), 
--- ½Ç¼ö·É¾×(ÃÑ ¼ö·É¾×-(¿ù±Þ*¼¼±Ý 3%*12))
---°¡ Ãâ·ÂµÇµµ·Ï ÇÏ½Ã¿À
-SELECT EMP_NAME AS "ÀÌ¸§", SALARY*12 AS ¿¬ºÀ, SALARY*12 + SALARY*BONUS "ÃÑ¼ö·É¾×(º¸³Ê½ºÆ÷ÇÔ)",
-(SALARY*12 + SALARY*BONUS)-(SALARY*0.03*12) "½Ç¼ö·É¾×" FROM EMPLOYEE;
+--8. EMPLOYEE í…Œì´ë¸”ì—ì„œ ì´ë¦„,ì—°ë´‰, ì´ìˆ˜ë ¹ì•¡(ë³´ë„ˆìŠ¤í¬í•¨), 
+-- ì‹¤ìˆ˜ë ¹ì•¡(ì´ ìˆ˜ë ¹ì•¡-(ì›”ê¸‰*ì„¸ê¸ˆ 3%*12))
+--ê°€ ì¶œë ¥ë˜ë„ë¡ í•˜ì‹œì˜¤
+SELECT EMP_NAME AS "ì´ë¦„", SALARY*12 AS ì—°ë´‰, SALARY*12 + SALARY*BONUS "ì´ìˆ˜ë ¹ì•¡(ë³´ë„ˆìŠ¤í¬í•¨)",
+(SALARY*12 + SALARY*BONUS)-(SALARY*0.03*12) "ì‹¤ìˆ˜ë ¹ì•¡" FROM EMPLOYEE;
 
---9. EMPLOYEE Å×ÀÌºí¿¡¼­ ÀÌ¸§, ±Ù¹« ÀÏ¼ö¸¦ Ãâ·ÂÇØº¸½Ã¿À 
---(SYSDATE¸¦ »ç¿ëÇÏ¸é ÇöÀç ½Ã°£ Ãâ·Â)
-SELECT EMP_NAME "ÀÌ¸§",HIRE_DATE, SYSDATE - HIRE_DATE  "±Ù¹«ÀÏ¼ö" FROM EMPLOYEE;
+--9. EMPLOYEE í…Œì´ë¸”ì—ì„œ ì´ë¦„, ê·¼ë¬´ ì¼ìˆ˜ë¥¼ ì¶œë ¥í•´ë³´ì‹œì˜¤ 
+--(SYSDATEë¥¼ ì‚¬ìš©í•˜ë©´ í˜„ìž¬ ì‹œê°„ ì¶œë ¥)
+SELECT EMP_NAME "ì´ë¦„",HIRE_DATE, SYSDATE - HIRE_DATE  "ê·¼ë¬´ì¼ìˆ˜" FROM EMPLOYEE;
 
---10. EMPLOYEE Å×ÀÌºí¿¡¼­ 20³â ÀÌ»ó ±Ù¼ÓÀÚÀÇ ÀÌ¸§,¿ù±Þ,º¸³Ê½ºÀ²¸¦ Ãâ·ÂÇÏ½Ã¿À.
-SELECT EMP_NAME "ÀÌ¸§",HIRE_DATE, SALARY "¿ù±Þ",BONUS "º¸³Ê½ºÀ²" FROM EMPLOYEE
+--10. EMPLOYEE í…Œì´ë¸”ì—ì„œ 20ë…„ ì´ìƒ ê·¼ì†ìžì˜ ì´ë¦„,ì›”ê¸‰,ë³´ë„ˆìŠ¤ìœ¨ë¥¼ ì¶œë ¥í•˜ì‹œì˜¤.
+SELECT EMP_NAME "ì´ë¦„",HIRE_DATE, SALARY "ì›”ê¸‰",BONUS "ë³´ë„ˆìŠ¤ìœ¨" FROM EMPLOYEE
 WHERE (SYSDATE - HIRE_DATE)/365 >=20;
 
 
